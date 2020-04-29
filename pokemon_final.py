@@ -118,7 +118,8 @@ def battle(your_poke_class, wild_poke_class, trigger=False):
             return battle(your_poke_class, wild_poke_class, trigger=True)
     elif wild_poke_class.hp <= 0:
         victory = "The wild " + wild_poke_class.name + " has fainted! Congrats trainer, you've won!"
-        return victory
+        print(victory)
+        return 1
     else:
         damage = your_poke_class.attack - wild_poke_class.defense
         hurt_hp = wild_poke_class.hp - damage
