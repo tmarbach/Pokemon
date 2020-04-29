@@ -1,10 +1,9 @@
-#!/usr/bin/env/python
 #Written by Tyler Marbach and Emma Bishop
 import pandas as pd
 
 pokemon = pd.read_csv("pokemon.csv", index_col = [30])
 poke_type = pokemon.rename(columns={'against_bug':'bug', 'against_dark':'dark', 'against_dragon':'dragon',
-                                     'against_electric':'electric', 'against_fairy':'fairy', 'against_fight':'fight',
+                                     'against_electric':'electric', 'against_fairy':'fairy', 'against_fight':'fighting',
                                      'against_fire':'fire', 'against_flying':'flying', 'against_ghost':'ghost',
                                      'against_grass':'grass', 'against_ground':'ground', 'against_ice':'ice',
                                      'against_normal':'normal', 'against_poison':'poison', 'against_psychic':'psychic',
@@ -17,7 +16,7 @@ def main():
     wild = wild_poke(names)
     powers = against_power(party, wild)
     pp = power_printer(powers, party, wild)
-    your_poke = Pokemon(pp[0], poke_type.loc[pp[0], 'hp'], pp[1], poke_type.loc[pp[0], 'sp_defense'])
+    your_poke = Pokemon(pp[0], poke_type.loc[pp[0], 'hp'], pp[2], poke_type.loc[pp[0], 'sp_defense'])
     wild_mon = Pokemon(wild,poke_type.loc[wild, 'hp'],poke_type.loc[wild, 'sp_attack'],poke_type.loc[wild, 'sp_defense'])
     battle(your_poke, wild_mon)
 
@@ -88,21 +87,20 @@ def against_power(party_list, wild_poke):
             multi2 = poke_type.loc[poke, wild_t2]
             type2 = power * multi2
             if type1 >= type2:
-                poke_power = (poke,type1)
+                poke_power = (poke,power,type1)
                 power_list.append(poke_power)
             else:
-                poke_power = (poke,type2)
+                poke_power = (poke,power,type2)
                 power_list.append(poke_power)
         else:
-            poke_power = (poke,type1)
+            poke_power = (poke,power,type1)
             power_list.append(poke_power)
-    return sorted(power_list, key = lambda x: x[1], reverse = True)
-
+    return(sorted(power_list, key = lambda x: x[2], reverse = True))
 
 def power_printer(powers_list, party_list, wild_poke):
     best_poke = powers_list[0]
     for poke in powers_list:
-        print(poke[0], ' sp-attack: ', poke[1])
+        print(poke[0], ' sp-attack: ', poke[1], 'adjusted sp-attack: ', poke[2])
     print('Battle between', best_poke[0], 'and', wild_poke, '!')
     return best_poke
 
